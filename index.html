@@ -25,7 +25,7 @@
         const coverFees = document.getElementById('cover-fees').checked;
 
         if (coverFees) {
-          amount = (amount + 0.3) / (1 - 0.029);
+          amount = (amount + 0.3) / (1 - 0.022);
           amount = Math.ceil(amount * 100); // round up to nearest cent
         } else {
           amount = Math.ceil(amount * 100);
