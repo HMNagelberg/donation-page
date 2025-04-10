@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Donate to Our Cause</title>
+  </head>
+  <body>
+    <h2>Support Our Mission</h2>
+    <form id="donation-form">
+      <label>
+        Donation amount (USD): 
+        <input type="number" id="amount" name="amount" min="1" required>
+      </label>
+      <br><br>
+      <label>
+        <input type="checkbox" id="cover-fees"> I'd like to cover processing fees (2.9% + 30¢)
+      </label>
+      <br><br>
+      <button type="submit">Donate</button>
+    </form>
+
+    <script>
+      document.getElementById('donation-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        let amount = parseFloat(document.getElementById('amount').value);
+        const coverFees = document.getElementById('cover-fees').checked;
+
+        if (coverFees) {
+          amount = (amount + 0.3) / (1 - 0.029);
+          amount = Math.ceil(amount * 100); // round up to nearest cent
+        } else {
+          amount = Math.ceil(amount * 100);
+        }
+
+        const res = await fetch('/.netlify/functions/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount })
+        });
+
+        const data = await res.json();
+        window.location.href = data.url;
+      });
+    </script>
+  </body>
+</html>
